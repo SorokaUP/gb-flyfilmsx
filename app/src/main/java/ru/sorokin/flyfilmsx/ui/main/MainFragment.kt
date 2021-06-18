@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import ru.sorokin.flyfilmsx.AppState
+import ru.sorokin.flyfilmsx.Film
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.MainActivityBinding
 import ru.sorokin.flyfilmsx.databinding.MainFragmentBinding
@@ -45,7 +46,7 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 val filmData = appState.filmData
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+                setData(filmData)
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
@@ -57,6 +58,16 @@ class MainFragment : Fragment() {
                     .setAction("Reload") { viewModel.getFilms() }
                     .show()
             }
+        }
+    }
+
+    private fun setData(filmData: List<Film>) {
+        if (filmData.isNotEmpty()) {
+            binding.filmCaption.text = filmData[0].caption
+            binding.filmDescription.text = filmData[0].description
+            binding.filmTags.text = filmData[0].tags
+            binding.filmDateFrom.text = filmData[0].dateFrom.toString()
+            //binding.filmPoster.setImageURI(filmData[0].posterPath)
         }
     }
 
