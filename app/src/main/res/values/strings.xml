@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlyFilmsX</string>
+    <string name="btnNyao">Нажми меня нежно</string>
+    <string name="tvNyao">MainFragment</string>
 </resources>
