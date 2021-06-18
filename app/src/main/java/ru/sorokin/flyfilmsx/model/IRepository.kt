@@ -1,4 +1,4 @@
-package ru.sorokin.flyfilmsx
+package ru.sorokin.flyfilmsx.model
 
 interface IRepository {
     fun getFilmsFromServer() : List<Film>

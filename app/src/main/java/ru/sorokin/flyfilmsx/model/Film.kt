@@ -1,4 +1,4 @@
-package ru.sorokin.flyfilmsx
+package ru.sorokin.flyfilmsx.model
 
 import java.io.Serializable
 import java.util.*

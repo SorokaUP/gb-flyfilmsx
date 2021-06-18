@@ -1,9 +1,9 @@
-package ru.sorokin.flyfilmsx
+package ru.sorokin.flyfilmsx.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.MainActivityBinding
-import ru.sorokin.flyfilmsx.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding

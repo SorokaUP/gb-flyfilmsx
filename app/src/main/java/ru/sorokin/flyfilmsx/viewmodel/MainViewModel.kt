@@ -1,10 +1,9 @@
-package ru.sorokin.flyfilmsx.ui.main
+package ru.sorokin.flyfilmsx.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.sorokin.flyfilmsx.AppState
-import ru.sorokin.flyfilmsx.Repository
+import ru.sorokin.flyfilmsx.model.Repository
 
 class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
