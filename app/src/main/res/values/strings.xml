@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FlyFilmsX</string>
+    <string name="btnNyao">Нажми меня нежно</string>
+    <string name="tvNyao">MainFragment</string>
+    <string name="filmCaption">Название фильма</string>
+    <string name="filmDescription">Описание фильма</string>
+    <string name="filmTags">Категории фильма</string>
+    <string name="filmDateFrom">Дата старта проката</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
