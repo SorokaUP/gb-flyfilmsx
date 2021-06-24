@@ -22,24 +22,35 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
+    // Модель данных - поставщик, который будет хранить наши данные, будет объявлен позже, по
+    // факту создания Fragment
     private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
+        // объект связку. Получает доступ к корневому элементу fragment_layout
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
+        // Сообщаем фрагменту, о модели данных, с которой он будет общаться
         viewModel = ViewModelProvider(this).get(MainViewModel :: class.java)
+        // Сразу же подписываемся на обновления всех данных от этой модели данных
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> {
+            // Действие, выполняемое по случаю обновления данных в поставщике
             renderData(it)
         })
-        viewModel.getFilms()
+        // И сразу же просим поставщика получить данные
+        viewModel.getFilmsFromLocalSource()
     }
 
     private fun renderData(appState: AppState) {
+        // В зависимости от того, чем сейчас занят поставщик, выполняем какие-то действия, о том
+        // чем он занят нам сообщается из appState который в свою очередь будет одним из вариаций
+        // Success(...), Loading(), Error(...)
         when (appState) {
             is AppState.Success -> {
                 val filmData = appState.filmData
@@ -53,13 +64,14 @@ class MainFragment : Fragment() {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
                     .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.getFilms() }
+                    .setAction("Reload") { viewModel.getFilmsFromLocalSource() }
                     .show()
             }
         }
     }
 
     private fun setData(filmData: List<Film>) {
+        // TODO: Нужен RecyclerView
         if (filmData.isNotEmpty()) {
             binding.filmCaption.text = filmData[0].caption
             binding.filmDescription.text = filmData[0].description
