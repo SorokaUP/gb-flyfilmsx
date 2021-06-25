@@ -7,19 +7,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.viewmodel.AppState
 import ru.sorokin.flyfilmsx.model.Film
-import ru.sorokin.flyfilmsx.databinding.MainFragmentBinding
+import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
+import ru.sorokin.flyfilmsx.viewmodel.ListFragmentAdapter
 import ru.sorokin.flyfilmsx.viewmodel.MainViewModel
 
-class MainFragment : Fragment() {
+class ListFragment : Fragment() {
 
-    private var _binding: MainFragmentBinding? = null
+    private var _binding: ListFragmentBinding? = null
     private val binding get() = _binding!!
+    private val adapter = ListFragmentAdapter(object : OnItemViewClickListener {
+        override fun onItemViewClick(film: Film) {
+            activity?.supportFragmentManager?.let {
+                it.beginTransaction()
+                    .add(R.id.container, FilmFragment.newInstance(film))
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+    })
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = ListFragment()
     }
 
     // Модель данных - поставщик, который будет хранить наши данные, будет объявлен позже, по
@@ -30,12 +43,14 @@ class MainFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
         // объект связку. Получает доступ к корневому элементу fragment_layout
-        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        _binding = ListFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
+
         // Сообщаем фрагменту, о модели данных, с которой он будет общаться
         viewModel = ViewModelProvider(this).get(MainViewModel :: class.java)
         // Сразу же подписываемся на обновления всех данных от этой модели данных
@@ -63,8 +78,8 @@ class MainFragment : Fragment() {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 Snackbar
-                    .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModel.getFilmsFromLocalSource() }
+                    .make(binding.root, getString(R.string.error_msg), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.reload_msg)) { viewModel.getFilmsFromLocalSource() }
                     .show()
             }
         }
@@ -73,16 +88,22 @@ class MainFragment : Fragment() {
     private fun setData(filmData: List<Film>) {
         // TODO: Нужен RecyclerView
         if (filmData.isNotEmpty()) {
-            binding.filmCaption.text = filmData[0].caption
-            binding.filmDescription.text = filmData[0].description
-            binding.filmTags.text = filmData[0].tags
-            binding.filmDateFrom.text = filmData[0].dateFrom.toString()
-            //binding.filmPoster.setImageURI(filmData[0].posterPath)
+            adapter.setListFilm(filmData)
         }
+    }
+
+    private fun initRecyclerView() {
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.adapter = adapter
+    }
+
+    interface OnItemViewClickListener {
+        fun onItemViewClick(film: Film)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        adapter.removeListener()
         _binding = null
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ru.sorokin.flyfilmsx.R
+import ru.sorokin.flyfilmsx.model.Film
 
 class FilmFragment : Fragment() {
 
@@ -19,7 +20,7 @@ class FilmFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(film: Film) =
             FilmFragment().apply {
             }
     }
