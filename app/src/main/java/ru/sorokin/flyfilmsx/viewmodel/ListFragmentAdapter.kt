@@ -15,15 +15,15 @@ import ru.sorokin.flyfilmsx.view.ListFragment
 class ListFragmentAdapter(private var onItemViewClickListener: ListFragment.OnItemViewClickListener?) :
     RecyclerView.Adapter<ListFragmentAdapter.ListViewHolder>() {
 
-    private lateinit var binding: ListItemBinding
     private var filmData: List<Film> = listOf()
 
     inner class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(film: Film) = with (binding) {
-            caption.text = film.caption
-            tags.text = film.tags
-            root.setOnClickListener {
+        fun bind(film: Film) {
+            itemView.findViewById<TextView>(R.id.caption).text = film.caption
+            itemView.findViewById<TextView>(R.id.tags).text = film.tags
+
+            itemView.setOnClickListener {
                 onItemViewClickListener?.onItemViewClick(film)
             }
         }
@@ -38,7 +38,6 @@ class ListFragmentAdapter(private var onItemViewClickListener: ListFragment.OnIt
         parent: ViewGroup,
         viewType: Int
     ): ListViewHolder {
-        binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.list_item, parent, false) as View
