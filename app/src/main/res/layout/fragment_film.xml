@@ -1,14 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#673AB7"
     tools:context=".view.FilmFragment">
 
-    <!-- TODO: Update blank fragment layout  -->
     <TextView
+        android:id="@+id/filmCardCaption"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginTop="120dp"
+        android:includeFontPadding="false"
+        android:maxLines="3"
+        android:shadowColor="@color/purple_700"
+        android:text="Очень длинное название фильма которое может не поместиться в ответденную ему область"
+        android:textAlignment="center"
+        android:textColor="#D3B0FF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filmCardPoster" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/filmCardPoster"
+        android:layout_width="match_parent"
+        android:layout_height="308dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/loki" />
+
+    <RatingBar
+        android:id="@+id/filmCardRate"
+        style="@android:style/Widget.Material.Light.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="322dp"
+        tools:layout_editor_absoluteY="399dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="247dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/filmCardCaption"
+        tools:layout_editor_absoluteX="10dp">
+
+        <TextView
+            android:id="@+id/filmCardDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:maxLines="3"
+            android:shadowColor="@color/purple_700"
+            android:text="Описание фильма"
+            android:textAlignment="viewStart"
+            android:textColor="#240051"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="77dp"
+            tools:layout_editor_absoluteY="496dp" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/filmCardTags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        android:textColor="#D3B0FF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
