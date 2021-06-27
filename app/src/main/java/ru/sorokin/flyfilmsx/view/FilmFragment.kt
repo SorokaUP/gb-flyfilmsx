@@ -27,16 +27,16 @@ class FilmFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val film = arguments?.getParcelable<Film>(ARG_FILM)
-        if (film != null) {
-            val caption = film.caption
-            binding.filmCardCaption.text = film.caption
-            binding.filmCardDescription.text = film.description
-            binding.filmCardTags.text = film.tags
-            binding.filmCardRate.rating = film.rate
-            val drawableResourceId =
-                this.resources.getIdentifier(film.posterPath, "drawable", context?.packageName)
-            binding.filmCardPoster.setImageDrawable(resources.getDrawable(drawableResourceId, null))
+        arguments?.getParcelable<Film>(ARG_FILM)?.let { film ->
+            with(binding) {
+                filmCardCaption.text = film.caption
+                filmCardDescription.text = film.description
+                filmCardTags.text = film.tags
+                filmCardRate.rating = film.rate
+                val drawableResourceId =
+                    resources.getIdentifier(film.posterPath, "drawable", context?.packageName)
+                filmCardPoster.setImageDrawable(resources.getDrawable(drawableResourceId, null))
+            }
         }
     }
 

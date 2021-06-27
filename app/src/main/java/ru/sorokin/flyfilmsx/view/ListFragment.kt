@@ -37,7 +37,9 @@ class ListFragment : Fragment() {
 
     // Модель данных - поставщик, который будет хранить наши данные, будет объявлен позже, по
     // факту создания Fragment
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -52,7 +54,6 @@ class ListFragment : Fragment() {
         initRecyclerView()
 
         // Сообщаем фрагменту, о модели данных, с которой он будет общаться
-        viewModel = ViewModelProvider(this).get(MainViewModel :: class.java)
         // Сразу же подписываемся на обновления всех данных от этой модели данных
         viewModel.getLiveData().observe(viewLifecycleOwner, Observer<AppState> {
             // Действие, выполняемое по случаю обновления данных в поставщике
@@ -68,26 +69,25 @@ class ListFragment : Fragment() {
         // Success(...), Loading(), Error(...)
         when (appState) {
             is AppState.Success -> {
-                val filmData = appState.filmData
                 binding.loadingLayout.visibility = View.GONE
-                setData(filmData)
+                setData(appState.filmData)
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
             }
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-                Snackbar
-                    .make(binding.root, getString(R.string.error_msg), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.reload_msg)) { viewModel.getFilmsFromLocalSource() }
-                    .show()
+                binding.root.showSnackBar(
+                    getString(R.string.error_msg),
+                    getString(R.string.reload_msg),
+                    { viewModel.getFilmsFromLocalSource() }
+                )
             }
         }
     }
 
     private fun setData(filmData: List<Film>) {
-        // TODO: Нужен RecyclerView
-        if (filmData.isNotEmpty()) {
+        filmData?.let {
             adapter.setListFilm(filmData)
         }
     }
@@ -95,6 +95,22 @@ class ListFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun View.showSnackBar(
+        text: String,
+        actionText: String,
+        action: (View) -> Unit,
+        length: Int = Snackbar.LENGTH_INDEFINITE
+    ) {
+        Snackbar.make(this, text, length).setAction(actionText, action).show()
+    }
+
+    private fun View.showSnackBar(
+        stringId: Int,
+        length: Int = Snackbar.LENGTH_INDEFINITE
+    ) {
+        Snackbar.make(this, getString(stringId), length).show()
     }
 
     interface OnItemViewClickListener {

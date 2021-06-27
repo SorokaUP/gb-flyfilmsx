@@ -4,9 +4,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class Repository : IRepository {
-    override fun getFilmsFromServer(): List<Film> {
-        return ArrayList()
-    }
+    override fun getFilmsFromServer() = ArrayList<Film>()
 
     override fun getFilmsFromLocalStorage(): List<Film> {
         var films = ArrayList<Film>()
