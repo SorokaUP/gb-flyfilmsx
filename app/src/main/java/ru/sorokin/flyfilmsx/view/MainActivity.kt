@@ -7,6 +7,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.MainActivityBinding
 import ru.sorokin.flyfilmsx.databinding.WebviewBinding
 import java.io.BufferedReader
@@ -17,30 +18,28 @@ import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
-    //private lateinit var binding: MainActivityBinding
-    private lateinit var bindingWebview: WebviewBinding
+    private lateinit var binding: MainActivityBinding
+    //private lateinit var bindingWebview: WebviewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //binding = MainActivityBinding.inflate(layoutInflater)
-        //val view = binding.getRoot()
-        //setContentView(view)
-
-        bindingWebview = WebviewBinding.inflate(layoutInflater)
-        bindingWebview.ok.setOnClickListener(clickListener)
-        val view = bindingWebview.getRoot()
+        binding = MainActivityBinding.inflate(layoutInflater)
+        val view = binding.getRoot()
         setContentView(view)
 
+        /*bindingWebview = WebviewBinding.inflate(layoutInflater)
+        bindingWebview.ok.setOnClickListener(clickListener)
+        val view = bindingWebview.getRoot()
+        setContentView(view)*/
 
-
-        /*if (savedInstanceState == null) {
+        if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, ListFragment.newInstance())
                     .commitNow()
-        }*/
+        }
     }
 
-    var clickListener: View.OnClickListener = object : View.OnClickListener {
+    /*var clickListener: View.OnClickListener = object : View.OnClickListener {
 
         @RequiresApi(Build.VERSION_CODES.N)
         override fun onClick(v: View?) {
@@ -79,5 +78,5 @@ class MainActivity : AppCompatActivity() {
         private fun getLines(reader: BufferedReader): String {
             return reader.lines().collect(Collectors.joining("\n"))
         }
-    }
+    }*/
 }
