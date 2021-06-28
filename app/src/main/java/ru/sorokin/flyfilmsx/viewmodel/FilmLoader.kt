@@ -5,6 +5,7 @@ import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.Gson
+import ru.sorokin.flyfilmsx.BuildConfig
 import ru.sorokin.flyfilmsx.model.FilmDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -22,13 +23,11 @@ class FilmLoader (
         fun onFailed(throwable: Throwable)
     }
 
-    private val API_KEY = "ad13319bfd35053445c0b0754f36eea2"
-
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadFilm() {
         try {
             val uri =
-                URL("https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}")
+                URL("https://api.themoviedb.org/3/movie/${id}?api_key=${BuildConfig.THEMOVIEDB_API_KEY}")
             val handler = Handler()
             Thread(Runnable {
                 lateinit var urlConnection: HttpsURLConnection

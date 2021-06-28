@@ -21,6 +21,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def apiKey  = properties.getProperty("themoviedbApiKey", "")
+        it.buildConfigField "String", "THEMOVIEDB_API_KEY", apiKey
+    }
     buildTypes {
         release {
             minifyEnabled false
