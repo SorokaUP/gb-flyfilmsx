@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import ru.sorokin.flyfilmsx.databinding.FragmentFilmBinding
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.FilmDTO
+import ru.sorokin.flyfilmsx.viewmodel.FilmLoader
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
@@ -29,6 +30,18 @@ class FilmFragment : Fragment() {
     private var _binding: FragmentFilmBinding? = null
     private val binding get() = _binding!!
     private lateinit var filmBundle: Film
+    private val onLoadListener: FilmLoader.FilmLoaderListener =
+        object : FilmLoader.FilmLoaderListener {
+
+            override fun onLoaded(filmDTO: FilmDTO) {
+                displayFilm(filmDTO)
+            }
+
+            override fun onFailed(throwable: Throwable) {
+                //Обработка ошибки
+            }
+        }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,21 +56,13 @@ class FilmFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*arguments?.getParcelable<Film>(ARG_FILM)?.let { film ->
-            with(binding) {
-                filmCardCaption.text = film.caption
-                filmCardDescription.text = film.description
-                filmCardTags.text = film.tags
-                filmCardRate.rating = film.rate
-                val drawableResourceId =
-                    resources.getIdentifier(film.posterPath, "drawable", context?.packageName)
-                filmCardPoster.setImageDrawable(resources.getDrawable(drawableResourceId, null))
-            }
-        }*/
+        arguments?.getParcelable<Film>(ARG_FILM)?.let { film ->
+            val loader = FilmLoader(onLoadListener, film.id)
+            loader.loadFilm()
+        }
         //filmBundle = arguments?.getParcelable(ARG_FILM) ?: Film()
         binding.mainView.visibility = View.GONE
         binding.loadingLayout.visibility = View.VISIBLE
-        loadFilm()
     }
 
     private fun displayFilm(filmDTO: FilmDTO) {
@@ -70,49 +75,6 @@ class FilmFragment : Fragment() {
             filmCardTags.text = filmDTO.genresToString()
             filmCardRate.rating = filmDTO.popularity ?: 0f
         }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun loadFilm() {
-        try {
-            val uri =
-                URL("https://api.themoviedb.org/3/movie/550?api_key=ad13319bfd35053445c0b0754f36eea2")
-            val handler = Handler()
-            Thread(Runnable {
-                lateinit var urlConnection: HttpsURLConnection
-                try {
-                    urlConnection = uri.openConnection() as HttpsURLConnection
-                    urlConnection.requestMethod = "GET"
-                    /*urlConnection.addRequestProperty(
-                        "api_key",
-                        API_KEY
-                    )*/
-                    urlConnection.readTimeout = 10000
-                    val bufferedReader =
-                        BufferedReader(InputStreamReader(urlConnection.inputStream))
-
-                    // преобразование ответа от сервера (JSON) в модель данных (WeatherDTO)
-                    val filmDTO: FilmDTO =
-                        Gson().fromJson(getLines(bufferedReader), FilmDTO::class.java)
-                    handler.post { displayFilm(filmDTO) }
-                } catch (e: Exception) {
-                    Log.e("", "Fail connection", e)
-                    e.printStackTrace()
-                    //Обработка ошибки
-                } finally {
-                    urlConnection.disconnect()
-                }
-            }).start()
-        } catch (e: MalformedURLException) {
-            Log.e("", "Fail URI", e)
-            e.printStackTrace()
-            //Обработка ошибки
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun getLines(reader: BufferedReader): String {
-        return reader.lines().collect(Collectors.joining("\n"))
     }
 
     override fun onDestroyView() {
