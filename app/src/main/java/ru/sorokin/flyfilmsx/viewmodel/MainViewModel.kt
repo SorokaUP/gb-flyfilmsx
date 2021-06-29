@@ -22,7 +22,7 @@ class MainViewModel(
         liveDataToObserve.value = AppState.Loading
         Thread {
             // Искусственная пауза для создания эффекта подгрузки данных с сервера
-            Thread.sleep(3000)
+            Thread.sleep(1000)
             // В связи с тем, что данные попадают из отдельного потока, используется postValue
             liveDataToObserve.postValue(AppState.Success(repository.getFilmsFromLocalStorage()))
         }.start()

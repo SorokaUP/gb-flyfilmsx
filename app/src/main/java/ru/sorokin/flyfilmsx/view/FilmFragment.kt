@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
+import ru.sorokin.flyfilmsx.databinding.FilmFragmentBinding
 import ru.sorokin.flyfilmsx.databinding.FragmentFilmBinding
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.FilmDTO
@@ -27,7 +28,7 @@ private const val API_KEY = "ad13319bfd35053445c0b0754f36eea2"
 //Пример запроса: https://api.themoviedb.org/3/movie/550?api_key=ad13319bfd35053445c0b0754f36eea2
 
 class FilmFragment : Fragment() {
-    private var _binding: FragmentFilmBinding? = null
+    private var _binding: FilmFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var filmBundle: Film
     private val onLoadListener: FilmLoader.FilmLoaderListener =
@@ -49,7 +50,7 @@ class FilmFragment : Fragment() {
     ): View? {
         // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
         // объект связку. Получает доступ к корневому элементу fragment_layout
-        _binding = FragmentFilmBinding.inflate(inflater, container, false)
+        _binding = FilmFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/filmLayoutBacground"
+    tools:context=".view.FilmFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/mainView"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/filmCardPoster"
+                android:layout_width="match_parent"
+                android:layout_height="308dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/poster_none" />
+
+            <TextView
+                android:id="@+id/filmCardCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="120dp"
+                android:includeFontPadding="false"
+                android:maxLines="3"
+                android:shadowColor="@color/purple_700"
+                android:text="@string/testFilmLayoutCaption"
+                android:textAlignment="center"
+                android:textColor="@color/filmLayoutCaption"
+                android:textSize="@dimen/filmLayoutCaption"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/filmCardPoster" />
+
+            <RatingBar
+                android:id="@+id/filmCardRate"
+                style="@android:style/Widget.Material.Light.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="322dp"
+                tools:layout_editor_absoluteY="399dp" />
+
+            <TextView
+                android:id="@+id/filmCardDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:includeFontPadding="false"
+                android:shadowColor="@color/purple_700"
+                android:text="@string/testFilmLayoutDescription"
+                android:textAlignment="viewStart"
+                android:textColor="@color/filmLayoutDescription"
+                android:textSize="@dimen/filmLayoutDescription"
+                app:layout_constraintTop_toBottomOf="@+id/filmCardCaption" />
+
+            <TextView
+                android:id="@+id/filmCardTags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/testFilmLayoutGenres"
+                android:textColor="#D3B0FF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/purple_200"
+        android:visibility="gone"
+        tools:visibility="invisible">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+</FrameLayout>

@@ -11,8 +11,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/list_item"/>
+        tools:listitem="@layout/list_item" />
 
     <FrameLayout
         android:id="@+id/loadingLayout"
