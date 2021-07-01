@@ -13,7 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import ru.sorokin.flyfilmsx.databinding.FilmFragmentBinding
-import ru.sorokin.flyfilmsx.databinding.FragmentFilmBinding
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.viewmodel.FilmLoader

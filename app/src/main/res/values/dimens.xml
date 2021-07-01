@@ -2,4 +2,8 @@
 <resources>
     <dimen name="filmLayoutDescription">14sp</dimen>
     <dimen name="filmLayoutCaption">20sp</dimen>
+    <dimen name="main_container_text_size">10sp</dimen>
+    <dimen name="margin_15_dp">15dp</dimen>
+    <dimen name="feels_like_text_size">10sp</dimen>
+    <dimen name="margin_5_dp">5dp</dimen>
 </resources>
