@@ -16,7 +16,7 @@ class MainViewModel(
 
     fun getLiveData() = liveDataToObserve
     fun getFilmsFromLocalSource() = getDataFromLocalSource()
-    fun getFilmsFromServerSource() = getDataFromLocalSource()
+    fun getFilmsFromServerSource() = getDataFromServerSource()
 
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
@@ -25,6 +25,14 @@ class MainViewModel(
             Thread.sleep(1000)
             // В связи с тем, что данные попадают из отдельного потока, используется postValue
             liveDataToObserve.postValue(AppState.Success(repository.getFilmsFromLocalStorage()))
+        }.start()
+    }
+
+    private fun getDataFromServerSource() {
+        liveDataToObserve.value = AppState.Loading
+        Thread {
+            // В связи с тем, что данные попадают из отдельного потока, используется postValue
+            liveDataToObserve.postValue(AppState.Success(repository.getFilmsFromServer()))
         }.start()
     }
 }
