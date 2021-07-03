@@ -44,7 +44,7 @@ class FilmFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Film>(ARG_FILM)?.let { film ->
+        arguments?.getParcelable<FilmDTO>(ARG_FILM)?.let { film ->
             val loader = FilmLoader(onLoadListener, film.id)
             loader.loadFilm()
         }

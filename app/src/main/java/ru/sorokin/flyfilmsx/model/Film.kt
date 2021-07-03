@@ -28,7 +28,7 @@ data class FilmDTO (
     val poster_path: String?,
     val production_companies: List<ProductionCompaniesDTO>?,
     val production_countries: List<ProductionCountriesDTO>?,
-    val release_date: Date?,
+    val release_date: String?,
     val runtime: Int?,
     val spoken_languages: List<SpokenLanguageDTO>?,
     val status: String?,
@@ -89,10 +89,10 @@ data class PopularResultDTO (
     val overview: String,
     val popularity: Float,
     val poster_path: String,
-    val release_date: Date,
+    val release_date: String,
     val title: String,
     val video: Boolean,
-    val vote_average: Int,
+    val vote_average: Float,
     val vote_count: Int
 ) {
     fun toFilmDTO() = FilmDTO (
