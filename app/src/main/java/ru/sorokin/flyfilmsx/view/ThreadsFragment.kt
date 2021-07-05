@@ -1,5 +1,9 @@
 package ru.sorokin.flyfilmsx.view
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -10,17 +14,52 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.fragment_threads.*
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.FragmentThreadsBinding
+import ru.sorokin.flyfilmsx.service.MAIN_SERVICE_INT_EXTRA
+import ru.sorokin.flyfilmsx.service.MAIN_SERVICE_STRING_EXTRA
+import ru.sorokin.flyfilmsx.service.MainService
 import java.util.*
 import java.util.concurrent.TimeUnit
+
+const val TEST_BROADCAST_INTENT_FILTER = "TEST BROADCAST INTENT FILTER"
+const val THREADS_FRAGMENT_BROADCAST_EXTRA = "THREADS_FRAGMENT_EXTRA"
 
 class ThreadsFragment : Fragment() {
 
     private var _binding: FragmentThreadsBinding? = null
     private val binding get() = _binding!!
     private var counterThread = 0
+
+    //Создаём свой BroadcastReceiver (получатель широковещательного сообщения)
+    private val testReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            //Достаём данные из интента
+            intent.getStringExtra(THREADS_FRAGMENT_BROADCAST_EXTRA)?.let {
+                binding.mainContainer.addView(AppCompatTextView(context).apply {
+                    text = it
+                    textSize = resources.getDimension(R.dimen.main_container_text_size)
+                })
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        context?.let {
+            LocalBroadcastManager.getInstance(it)
+                .registerReceiver(testReceiver, IntentFilter(TEST_BROADCAST_INTENT_FILTER))
+        }
+    }
+
+    override fun onDestroy() {
+        context?.let {
+            LocalBroadcastManager.getInstance(it).unregisterReceiver(testReceiver)
+        }
+        super.onDestroy()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +72,28 @@ class ThreadsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initButton()
+        initCalcThreadButton()
+        initHandlerThreadButton()
+        initServiceButton()
+        initServiceWithBroadcastButton()
+    }
+
+    private fun initServiceWithBroadcastButton() {
+        binding.serviceWithBroadcastButton.setOnClickListener {
+            context?.let {
+                it.startService(Intent(it, MainService::class.java).apply {
+                    putExtra(
+                        MAIN_SERVICE_INT_EXTRA,
+                        binding.editText.text.toString().toInt()
+                    )
+                })
+            }
+        }
+    }
+
+    private fun initButton() {
         binding.button.setOnClickListener {
             binding.textView.text = startCalculations(binding.editText.text.toString().toInt())
             binding.mainContainer.addView(AppCompatTextView(it.context).apply {
@@ -40,8 +101,9 @@ class ThreadsFragment : Fragment() {
                 textSize = resources.getDimension(R.dimen.main_container_text_size)
             })
         }
+    }
 
-
+    private fun initCalcThreadButton() {
         binding.calcThreadBtn.setOnClickListener {
             Thread {
                 counterThread++
@@ -55,8 +117,9 @@ class ThreadsFragment : Fragment() {
                 }
             }.start()
         }
+    }
 
-
+    private fun initHandlerThreadButton() {
         val handlerThread = HandlerThread(getString(R.string.my_handler_thread))
         handlerThread.start()
         val handler = Handler(handlerThread.looper)
@@ -80,6 +143,19 @@ class ThreadsFragment : Fragment() {
                         textSize = resources.getDimension(R.dimen.main_container_text_size)
                     })
                 }
+            }
+        }
+    }
+
+    private fun initServiceButton() {
+        binding.serviceButton.setOnClickListener {
+            context?.let {
+                it.startService(Intent(it, MainService::class.java).apply {
+                    putExtra(
+                        MAIN_SERVICE_STRING_EXTRA,
+                        getString(R.string.hello_from_thread_fragment)
+                    )
+                })
             }
         }
     }
