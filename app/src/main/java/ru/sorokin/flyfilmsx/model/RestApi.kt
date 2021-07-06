@@ -42,8 +42,9 @@ object RestApi {
         }
     }
 
-    fun runQueryWithOutThread(query: String) : String {
+    fun runQueryWithOutThread(query: String, isNeedException: Boolean = false) : String {
         var res = ""
+        var ex = Exception("")
         val uri = URL(query)
         lateinit var urlConnection: HttpsURLConnection
         try {
@@ -51,8 +52,11 @@ object RestApi {
             res = getFromUrl(urlConnection)
         } catch (e: Exception) {
             onException(e, "Fail connection")
+            ex = e
         } finally {
             urlConnection.disconnect()
+            if (ex.message != "" && isNeedException)
+                throw ex
             return res
         }
     }
