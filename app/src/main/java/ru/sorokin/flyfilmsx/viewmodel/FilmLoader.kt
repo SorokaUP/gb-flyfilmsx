@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import com.google.gson.Gson
 import ru.sorokin.flyfilmsx.BuildConfig
 import ru.sorokin.flyfilmsx.model.FilmDTO
+import ru.sorokin.flyfilmsx.model.RestApi
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
@@ -19,50 +20,23 @@ class FilmLoader (
     private val id: Int
 ) {
     interface FilmLoaderListener {
-        fun onLoaded(weatherDTO: FilmDTO)
+        fun onLoaded(filmDTO: FilmDTO)
         fun onFailed(throwable: Throwable)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun loadFilm() {
-        try {
-            val uri =
-                URL("https://api.themoviedb.org/3/movie/${id}?api_key=${BuildConfig.THEMOVIEDB_API_KEY}")
-            val handler = Handler()
-            Thread(Runnable {
-                lateinit var urlConnection: HttpsURLConnection
-                try {
-                    urlConnection = uri.openConnection() as HttpsURLConnection
-                    urlConnection.requestMethod = "GET"
-                    /*urlConnection.addRequestProperty(
-                        "api_key",
-                        API_KEY
-                    )*/
-                    urlConnection.readTimeout = 10000
-                    val bufferedReader =
-                        BufferedReader(InputStreamReader(urlConnection.inputStream))
+        val query = "https://api.themoviedb.org/3/movie/${id}?api_key=${BuildConfig.THEMOVIEDB_API_KEY}"
+        RestApi.runQuery(query, object : RestApi.IRestApiListener {
 
-                    // преобразование ответа от сервера (JSON) в модель данных (WeatherDTO)
-                    val filmDTO: FilmDTO =
-                        Gson().fromJson(getLines(bufferedReader), FilmDTO::class.java)
-                    handler.post { listener.onLoaded(filmDTO) }
-                } catch (e: Exception) {
-                    Log.e("", "Fail connection", e)
-                    e.printStackTrace()
-                    //Обработка ошибки
-                } finally {
-                    urlConnection.disconnect()
-                }
-            }).start()
-        } catch (e: MalformedURLException) {
-            Log.e("", "Fail URI", e)
-            e.printStackTrace()
-            listener.onFailed(e)
-        }
-    }
+            override fun onLoaded(res: String) {
+                val filmDTO: FilmDTO = Gson().fromJson(res, FilmDTO::class.java)
+                listener.onLoaded(filmDTO)
+            }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun getLines(reader: BufferedReader): String {
-        return reader.lines().collect(Collectors.joining("\n"))
+            override fun onFailed(throwable: Throwable) {
+                listener.onFailed(throwable)
+            }
+        })
     }
 }

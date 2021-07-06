@@ -10,19 +10,19 @@ import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
 import ru.sorokin.flyfilmsx.databinding.ListItemBinding
 import ru.sorokin.flyfilmsx.model.Film
+import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.view.ListFragment
 
 class ListFragmentAdapter(private var onItemViewClickListener: ListFragment.OnItemViewClickListener?) :
     RecyclerView.Adapter<ListFragmentAdapter.ListViewHolder>() {
 
-    private var filmData: List<Film> = listOf()
+    private var filmData: List<FilmDTO> = listOf()
 
     inner class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(film: Film) {
+        fun bind(film: FilmDTO) {
             itemView.apply {
-                findViewById<TextView>(R.id.caption).text = film.caption
-                findViewById<TextView>(R.id.tags).text = film.tags
+                findViewById<TextView>(R.id.caption).text = film.original_title
                 setOnClickListener {
                     onItemViewClickListener?.onItemViewClick(film)
                 }
@@ -30,7 +30,7 @@ class ListFragmentAdapter(private var onItemViewClickListener: ListFragment.OnIt
         }
     }
 
-    fun setListFilm(data: List<Film>) {
+    fun setListFilm(data: List<FilmDTO>) {
         filmData = data
         notifyDataSetChanged()
     }

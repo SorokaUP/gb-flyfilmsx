@@ -1,31 +1,19 @@
 package ru.sorokin.flyfilmsx.view
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.google.gson.Gson
 import ru.sorokin.flyfilmsx.databinding.FilmFragmentBinding
-import ru.sorokin.flyfilmsx.databinding.FragmentFilmBinding
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.viewmodel.FilmLoader
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
-
-private const val API_KEY = "ad13319bfd35053445c0b0754f36eea2"
-//Пример запроса: https://api.themoviedb.org/3/movie/550?api_key=ad13319bfd35053445c0b0754f36eea2
 
 class FilmFragment : Fragment() {
     private var _binding: FilmFragmentBinding? = null
@@ -43,7 +31,6 @@ class FilmFragment : Fragment() {
             }
         }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,7 +44,7 @@ class FilmFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<Film>(ARG_FILM)?.let { film ->
+        arguments?.getParcelable<FilmDTO>(ARG_FILM)?.let { film ->
             val loader = FilmLoader(onLoadListener, film.id)
             loader.loadFilm()
         }
@@ -87,7 +74,7 @@ class FilmFragment : Fragment() {
         const val ARG_FILM = "film"
 
         @JvmStatic
-        fun newInstance(film: Film) =
+        fun newInstance(film: FilmDTO) =
             FilmFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_FILM, film)

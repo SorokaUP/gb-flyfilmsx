@@ -13,6 +13,7 @@ import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.viewmodel.AppState
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
+import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.viewmodel.ListFragmentAdapter
 import ru.sorokin.flyfilmsx.viewmodel.MainViewModel
 
@@ -21,7 +22,7 @@ class ListFragment : Fragment() {
     private var _binding: ListFragmentBinding? = null
     private val binding get() = _binding!!
     private val adapter = ListFragmentAdapter(object : OnItemViewClickListener {
-        override fun onItemViewClick(film: Film) {
+        override fun onItemViewClick(film: FilmDTO) {
             activity?.supportFragmentManager?.let {
                 it.beginTransaction()
                     .add(R.id.container, FilmFragment.newInstance(film))
@@ -60,7 +61,7 @@ class ListFragment : Fragment() {
             renderData(it)
         })
         // И сразу же просим поставщика получить данные
-        viewModel.getFilmsFromLocalSource()
+        viewModel.getFilmsFromServerSource()
     }
 
     private fun renderData(appState: AppState) {
@@ -80,13 +81,13 @@ class ListFragment : Fragment() {
                 binding.root.showSnackBar(
                     getString(R.string.error_msg),
                     getString(R.string.reload_msg),
-                    { viewModel.getFilmsFromLocalSource() }
+                    { viewModel.getFilmsFromServerSource() }
                 )
             }
         }
     }
 
-    private fun setData(filmData: List<Film>) {
+    private fun setData(filmData: List<FilmDTO>) {
         filmData?.let {
             adapter.setListFilm(filmData)
         }
@@ -114,7 +115,7 @@ class ListFragment : Fragment() {
     }
 
     interface OnItemViewClickListener {
-        fun onItemViewClick(film: Film)
+        fun onItemViewClick(film: FilmDTO)
     }
 
     override fun onDestroyView() {
