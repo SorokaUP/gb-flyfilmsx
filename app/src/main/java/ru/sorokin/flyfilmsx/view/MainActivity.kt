@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    //.replace(R.id.container, ListFragment.newInstance())
-                    .replace(R.id.container, ThreadsFragment.newInstance())
+                    .replace(R.id.container, ListFragment.newInstance())
+                    //.replace(R.id.container, ThreadsFragment.newInstance())
                     .commitNow()
         }
     }

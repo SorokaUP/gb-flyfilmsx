@@ -1,8 +1,10 @@
 package ru.sorokin.flyfilmsx.viewmodel
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.model.Repository
 
 class MainViewModel(
@@ -30,9 +32,18 @@ class MainViewModel(
 
     private fun getDataFromServerSource() {
         liveDataToObserve.value = AppState.Loading
-        Thread {
-            // В связи с тем, что данные попадают из отдельного потока, используется postValue
-            liveDataToObserve.postValue(AppState.Success(repository.getFilmsFromServer()))
-        }.start()
+        // Переделано на Слушателя, так как компонент
+        repository.getFilmsPopularFromServer(object : ListFilmLoader.FilmLoaderListener {
+            override fun onLoaded(listFilmDTO: List<FilmDTO>) {
+                Thread {
+                    // В связи с тем, что данные попадают из отдельного потока, используется postValue
+                    liveDataToObserve.postValue(AppState.Success(listFilmDTO))
+                }.start()
+            }
+
+            override fun onFailed(throwable: Throwable) {
+
+            }
+        })
     }
 }

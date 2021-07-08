@@ -4,12 +4,12 @@ import ru.sorokin.flyfilmsx.viewmodel.ListFilmLoader
 import kotlin.collections.ArrayList
 
 class Repository : IRepository {
-    override fun getFilmsFromServer(): List<FilmDTO> {
-        val loader = ListFilmLoader(null, 1)
-        return loader.loadListWithOutThread()
+    override fun getFilmsPopularFromServer(listener: ListFilmLoader.FilmLoaderListener) {
+        val loader = ListFilmLoader(listener, 1)
+        loader.loadList()
     }
 
-    override fun getFilmsFromLocalStorage(): List<FilmDTO> {
+    override fun getFilmsFromLocalStorage() : List<FilmDTO> {
         var films = ArrayList<FilmDTO>()
         films.add(FilmDTO(
             null,
