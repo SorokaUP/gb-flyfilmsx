@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,6 +74,13 @@ class FilmFragment : Fragment() {
             filmCardDescription.text = filmDTO.overview
             filmCardTags.text = filmDTO.genresToString()
             filmCardRate.rating = filmDTO.popularity ?: 0f
+
+            context?.let {
+                val posterPath = RestApiMethods.ADDRESS_IMAGE_600X900 + filmDTO.poster_path
+                Glide.with(it)
+                    .load(posterPath)
+                    .into(filmCardPoster)
+            };
         }
     }
 
