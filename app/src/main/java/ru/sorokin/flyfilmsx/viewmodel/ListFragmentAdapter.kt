@@ -3,14 +3,17 @@ package ru.sorokin.flyfilmsx.viewmodel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
 import ru.sorokin.flyfilmsx.databinding.ListItemBinding
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.FilmDTO
+import ru.sorokin.flyfilmsx.model.RestApiMethods
 import ru.sorokin.flyfilmsx.view.ListFragment
 
 class ListFragmentAdapter(private var onItemViewClickListener: ListFragment.OnItemViewClickListener?) :
@@ -23,6 +26,15 @@ class ListFragmentAdapter(private var onItemViewClickListener: ListFragment.OnIt
         fun bind(film: FilmDTO) {
             itemView.apply {
                 findViewById<TextView>(R.id.caption).text = film.original_title
+                val poster = findViewById<ImageView>(R.id.poster)
+
+                context?.let {
+                    val posterPath = RestApiMethods.ADDRESS_IMAGE_600X900 + film.poster_path
+                    Glide.with(it)
+                        .load(posterPath)
+                        .into(poster)
+                };
+
                 setOnClickListener {
                     onItemViewClickListener?.onItemViewClick(film)
                 }

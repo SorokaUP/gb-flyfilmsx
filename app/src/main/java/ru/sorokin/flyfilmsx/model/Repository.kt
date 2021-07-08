@@ -1,15 +1,17 @@
 package ru.sorokin.flyfilmsx.model
 
-import ru.sorokin.flyfilmsx.viewmodel.ListFilmLoader
 import kotlin.collections.ArrayList
 
 class Repository : IRepository {
-    override fun getFilmsFromServer(): List<FilmDTO> {
-        val loader = ListFilmLoader(null, 1)
-        return loader.loadListWithOutThread()
+    override fun getFilmsPopularFromServer(callback: retrofit2.Callback<PopularListDTO>, pageId: Int) {
+        RestApi.api.getFilmsPopular(pageId).enqueue(callback)
     }
 
-    override fun getFilmsFromLocalStorage(): List<FilmDTO> {
+    override fun getFilmFromServer(callback: retrofit2.Callback<FilmDTO>, id: Int) {
+        RestApi.api.getFilm(id).enqueue(callback)
+    }
+
+    override fun getFilmsFromLocalStorage() : List<FilmDTO> {
         var films = ArrayList<FilmDTO>()
         films.add(FilmDTO(
             null,

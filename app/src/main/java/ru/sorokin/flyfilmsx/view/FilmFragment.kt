@@ -6,30 +6,42 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.FilmFragmentBinding
-import ru.sorokin.flyfilmsx.model.Film
-import ru.sorokin.flyfilmsx.model.FilmDTO
-import ru.sorokin.flyfilmsx.viewmodel.FilmLoader
-import java.net.MalformedURLException
-import java.net.URL
-import java.util.stream.Collectors
-import javax.net.ssl.HttpsURLConnection
+import ru.sorokin.flyfilmsx.model.*
+import ru.sorokin.flyfilmsx.viewmodel.AppState
+import kotlin.properties.Delegates
 
 class FilmFragment : Fragment() {
     private var _binding: FilmFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var filmBundle: Film
-    private val onLoadListener: FilmLoader.FilmLoaderListener =
-        object : FilmLoader.FilmLoaderListener {
+    private var filmId: Int = 0
+    private val callBack = object :
+        Callback<FilmDTO> {
 
-            override fun onLoaded(filmDTO: FilmDTO) {
+        override fun onResponse(call: Call<FilmDTO>, response: Response<FilmDTO>) {
+            val filmDTO: FilmDTO? = response.body()
+            if (response.isSuccessful && filmDTO != null) {
                 displayFilm(filmDTO)
-            }
-
-            override fun onFailed(throwable: Throwable) {
-                //Обработка ошибки
+            } else {
+                binding.root.showSnackBar(
+                    getString(R.string.error_msg),
+                    getString(R.string.reload_msg),
+                    { RestApi.api.getFilm(filmId).enqueue(this) }
+                )
             }
         }
+
+        override fun onFailure(call: Call<FilmDTO>, t: Throwable) {
+            AppState.Error(t)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +57,8 @@ class FilmFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getParcelable<FilmDTO>(ARG_FILM)?.let { film ->
-            val loader = FilmLoader(onLoadListener, film.id)
-            loader.loadFilm()
+            filmId = film.id
+            RestApi.api.getFilm(filmId).enqueue(callBack)
         }
         //filmBundle = arguments?.getParcelable(ARG_FILM) ?: Film()
         binding.mainView.visibility = View.GONE
@@ -62,7 +74,23 @@ class FilmFragment : Fragment() {
             filmCardDescription.text = filmDTO.overview
             filmCardTags.text = filmDTO.genresToString()
             filmCardRate.rating = filmDTO.popularity ?: 0f
+
+            context?.let {
+                val posterPath = RestApiMethods.ADDRESS_IMAGE_600X900 + filmDTO.poster_path
+                Glide.with(it)
+                    .load(posterPath)
+                    .into(filmCardPoster)
+            };
         }
+    }
+
+    private fun View.showSnackBar(
+        text: String,
+        actionText: String,
+        action: (View) -> Unit,
+        length: Int = Snackbar.LENGTH_INDEFINITE
+    ) {
+        Snackbar.make(this, text, length).setAction(actionText, action).show()
     }
 
     override fun onDestroyView() {

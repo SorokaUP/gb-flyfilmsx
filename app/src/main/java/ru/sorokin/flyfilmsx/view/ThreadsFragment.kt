@@ -18,9 +18,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import kotlinx.android.synthetic.main.fragment_threads.*
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.FragmentThreadsBinding
-import ru.sorokin.flyfilmsx.service.MAIN_SERVICE_INT_EXTRA
-import ru.sorokin.flyfilmsx.service.MAIN_SERVICE_STRING_EXTRA
-import ru.sorokin.flyfilmsx.service.MainService
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -76,21 +73,6 @@ class ThreadsFragment : Fragment() {
         initButton()
         initCalcThreadButton()
         initHandlerThreadButton()
-        initServiceButton()
-        initServiceWithBroadcastButton()
-    }
-
-    private fun initServiceWithBroadcastButton() {
-        binding.serviceWithBroadcastButton.setOnClickListener {
-            context?.let {
-                it.startService(Intent(it, MainService::class.java).apply {
-                    putExtra(
-                        MAIN_SERVICE_INT_EXTRA,
-                        binding.editText.text.toString().toInt()
-                    )
-                })
-            }
-        }
     }
 
     private fun initButton() {
@@ -143,19 +125,6 @@ class ThreadsFragment : Fragment() {
                         textSize = resources.getDimension(R.dimen.main_container_text_size)
                     })
                 }
-            }
-        }
-    }
-
-    private fun initServiceButton() {
-        binding.serviceButton.setOnClickListener {
-            context?.let {
-                it.startService(Intent(it, MainService::class.java).apply {
-                    putExtra(
-                        MAIN_SERVICE_STRING_EXTRA,
-                        getString(R.string.hello_from_thread_fragment)
-                    )
-                })
             }
         }
     }
