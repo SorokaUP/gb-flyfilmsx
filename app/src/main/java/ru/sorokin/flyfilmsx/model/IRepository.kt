@@ -1,8 +1,10 @@
 package ru.sorokin.flyfilmsx.model
 
-import ru.sorokin.flyfilmsx.viewmodel.ListFilmLoader
+import retrofit2.http.*
 
 interface IRepository {
-    fun getFilmsPopularFromServer(listener: ListFilmLoader.FilmLoaderListener)//: List<FilmDTO>
     fun getFilmsFromLocalStorage() : List<FilmDTO>
+
+    fun getFilmsPopularFromServer(callback: retrofit2.Callback<PopularListDTO>, pageId: Int)
+    fun getFilmFromServer(callback: retrofit2.Callback<FilmDTO>, id: Int)
 }

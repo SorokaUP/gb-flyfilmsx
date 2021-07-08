@@ -1,10 +1,17 @@
 package ru.sorokin.flyfilmsx.viewmodel
 
+import android.net.sip.SipErrorCode.SERVER_ERROR
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.sorokin.flyfilmsx.model.FilmDTO
+import ru.sorokin.flyfilmsx.model.PopularListDTO
+import ru.sorokin.flyfilmsx.model.PopularResultDTO
 import ru.sorokin.flyfilmsx.model.Repository
 
 class MainViewModel(
@@ -32,18 +39,30 @@ class MainViewModel(
 
     private fun getDataFromServerSource() {
         liveDataToObserve.value = AppState.Loading
-        // Переделано на Слушателя, так как компонент
-        repository.getFilmsPopularFromServer(object : ListFilmLoader.FilmLoaderListener {
-            override fun onLoaded(listFilmDTO: List<FilmDTO>) {
-                Thread {
-                    // В связи с тем, что данные попадают из отдельного потока, используется postValue
-                    liveDataToObserve.postValue(AppState.Success(listFilmDTO))
-                }.start()
-            }
+        repository.getFilmsPopularFromServer(callBack, 1)
+    }
 
-            override fun onFailed(throwable: Throwable) {
+    private val callBack = object :
+        Callback<PopularListDTO> {
 
-            }
-        })
+        override fun onResponse(call: Call<PopularListDTO>, response: Response<PopularListDTO>) {
+            val popularListDTO: PopularListDTO? = response.body()
+            liveDataToObserve.postValue(
+                if (response.isSuccessful && popularListDTO != null) {
+                    val listFilmDTO = ArrayList<FilmDTO>()
+                    for (item: PopularResultDTO in popularListDTO.results) {
+                        listFilmDTO.add(item.toFilmDTO())
+                    }
+
+                    AppState.Success(listFilmDTO)
+                } else {
+                    AppState.Error(Exception("SERVER_ERROR"))
+                }
+            )
+        }
+
+        override fun onFailure(call: Call<PopularListDTO>, t: Throwable) {
+            AppState.Error(t)
+        }
     }
 }
