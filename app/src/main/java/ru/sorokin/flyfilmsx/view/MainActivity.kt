@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import ru.sorokin.flyfilmsx.R
-import ru.sorokin.flyfilmsx.SettingsFragment
 import ru.sorokin.flyfilmsx.databinding.AppBarMainBinding
 import ru.sorokin.flyfilmsx.databinding.MainActivityBinding
 import ru.sorokin.flyfilmsx.viewmodel.MainBroadcastReceiver
@@ -32,9 +31,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ListFragment.newInstance())
-                .commitNow()
+            goToMain()
         }
     }
 
@@ -59,9 +56,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun goToMain() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, ListFragment.newInstance())
+            .commitNow()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.menuMain -> {
+                goToMain()
                 true
             }
             R.id.menuSettings -> {
@@ -73,6 +77,11 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menuLike -> {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, LikeFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+
                 true
             }
             else -> {

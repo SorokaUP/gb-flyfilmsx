@@ -12,13 +12,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.sorokin.flyfilmsx.R
-import ru.sorokin.flyfilmsx.databinding.FilmFragmentBinding
+import ru.sorokin.flyfilmsx.databinding.FragmentFilmBinding
 import ru.sorokin.flyfilmsx.model.*
 import ru.sorokin.flyfilmsx.viewmodel.AppState
 import kotlin.properties.Delegates
 
 class FilmFragment : Fragment() {
-    private var _binding: FilmFragmentBinding? = null
+    private var _binding: FragmentFilmBinding? = null
     private val binding get() = _binding!!
     private lateinit var filmBundle: Film
     private var filmId: Int = 0
@@ -49,7 +49,7 @@ class FilmFragment : Fragment() {
     ): View? {
         // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
         // объект связку. Получает доступ к корневому элементу fragment_layout
-        _binding = FilmFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentFilmBinding.inflate(inflater, container, false)
         return binding.root
     }
 

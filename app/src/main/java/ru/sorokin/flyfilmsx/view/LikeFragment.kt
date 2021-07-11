@@ -1,12 +1,14 @@
-package ru.sorokin.flyfilmsx
+package ru.sorokin.flyfilmsx.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import ru.sorokin.flyfilmsx.R
 
-class SettingsFragment : Fragment() {
+class LikeFragment : Fragment() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -16,11 +18,12 @@ class SettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_like, container, false)
     }
 
     companion object {
+
         @JvmStatic
-        fun newInstance() = SettingsFragment()
+        fun newInstance() = LikeFragment()
     }
 }

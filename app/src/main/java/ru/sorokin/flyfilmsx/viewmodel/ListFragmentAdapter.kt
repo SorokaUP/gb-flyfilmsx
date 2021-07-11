@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.sorokin.flyfilmsx.R
-import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
 import ru.sorokin.flyfilmsx.databinding.ListItemBinding
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.FilmDTO

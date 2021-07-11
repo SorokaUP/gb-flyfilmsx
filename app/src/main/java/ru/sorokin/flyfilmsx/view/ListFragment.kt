@@ -9,15 +9,15 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import ru.sorokin.flyfilmsx.R
+import ru.sorokin.flyfilmsx.databinding.FragmentListBinding
 import ru.sorokin.flyfilmsx.viewmodel.AppState
-import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
 import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.viewmodel.ListFragmentAdapter
 import ru.sorokin.flyfilmsx.viewmodel.MainViewModel
 
 class ListFragment : Fragment() {
 
-    private var _binding: ListFragmentBinding? = null
+    private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val adapter = ListFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemViewClick(film: FilmDTO) {
@@ -44,7 +44,7 @@ class ListFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
         // объект связку. Получает доступ к корневому элементу fragment_layout
-        _binding = ListFragmentBinding.inflate(inflater, container, false)
+        _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
