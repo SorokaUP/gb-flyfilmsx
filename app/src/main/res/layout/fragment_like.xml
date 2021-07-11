@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.LikeFragment"
-    android:id="@+id/listFragmentRootView">
+    tools:context=".view.ListFragment"
+    android:id="@+id/likeFragmentRootView">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

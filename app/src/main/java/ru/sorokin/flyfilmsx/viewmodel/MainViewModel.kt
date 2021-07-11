@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.sorokin.flyfilmsx.App.App
 import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.model.PopularList
 import ru.sorokin.flyfilmsx.model.PopularResult
 import ru.sorokin.flyfilmsx.model.Repository
+import ru.sorokin.flyfilmsx.room.DBRepository
+import ru.sorokin.flyfilmsx.room.IDBRepository
 
 class MainViewModel(
     // LiveData может подписывать кого либо на себя, говоря тем самым кому бы то нибыло об
@@ -16,12 +19,14 @@ class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
     // Источник данных для приложения. Сам Репозиторий берет данные от туда, от куда ему нужно,
     // он лишь получает и хранит данные
-    private val repository: Repository = Repository()
+    private val repository: Repository = Repository(),
+    private val historyRepository: IDBRepository = DBRepository(App.getHistoryDao())
 ) : ViewModel() {
 
     fun getLiveData() = liveDataToObserve
     fun getFilmsFromLocalSource() = getDataFromLocalSource()
     fun getFilmsFromServerSource() = getDataFromServerSource()
+    fun getFilmsLikeFromDataBase() = getDataLikeFromDataBase()
 
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
@@ -30,6 +35,18 @@ class MainViewModel(
             Thread.sleep(1000)
             // В связи с тем, что данные попадают из отдельного потока, используется postValue
             liveDataToObserve.postValue(AppState.Success(repository.getFilmsFromLocalStorage()))
+        }.start()
+    }
+
+    private fun getDataLikeFromDataBase() {
+        liveDataToObserve.value = AppState.Loading
+        Thread {
+            val listFilmDTO = historyRepository.getAllLike()
+            if (listFilmDTO.isNotEmpty()) {
+                AppState.Success(listFilmDTO)
+            } else {
+                AppState.Error(Exception("DATABASE EMPTY"))
+            }
         }.start()
     }
 
