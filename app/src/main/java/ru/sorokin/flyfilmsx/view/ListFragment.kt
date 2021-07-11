@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.viewmodel.AppState
-import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.databinding.ListFragmentBinding
 import ru.sorokin.flyfilmsx.model.FilmDTO
 import ru.sorokin.flyfilmsx.viewmodel.ListFragmentAdapter
@@ -25,7 +23,7 @@ class ListFragment : Fragment() {
         override fun onItemViewClick(film: FilmDTO) {
             activity?.supportFragmentManager?.let {
                 it.beginTransaction()
-                    .add(R.id.container, FilmFragment.newInstance(film))
+                    .add(R.id.fragment_container, FilmFragment.newInstance(film))
                     .addToBackStack(null)
                     .commit()
             }

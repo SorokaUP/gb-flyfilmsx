@@ -27,5 +27,10 @@
     <string name="handler_thread">Handler_Thread</string>
     <string name="service">Service</string>
     <string name="service_broadcast">Service + Broadcast</string>
+    <string name="content18plus">Контент для взрослых</string>
+    <string name="toMain">На главную</string>
+    <string name="settings">Настройки</string>
+    <string name="like">Избранное</string>
+    <string name="search">Поиск</string>
 
 </resources>
