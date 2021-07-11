@@ -15,20 +15,18 @@ import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.FragmentFilmBinding
 import ru.sorokin.flyfilmsx.model.*
 import ru.sorokin.flyfilmsx.viewmodel.AppState
-import kotlin.properties.Delegates
 
 class FilmFragment : Fragment() {
     private var _binding: FragmentFilmBinding? = null
     private val binding get() = _binding!!
-    private lateinit var filmBundle: Film
     private var filmId: Int = 0
     private val callBack = object :
-        Callback<FilmDTO> {
+        Callback<Film> {
 
-        override fun onResponse(call: Call<FilmDTO>, response: Response<FilmDTO>) {
-            val filmDTO: FilmDTO? = response.body()
-            if (response.isSuccessful && filmDTO != null) {
-                displayFilm(filmDTO)
+        override fun onResponse(call: Call<Film>, response: Response<Film>) {
+            val film: Film? = response.body()
+            if (response.isSuccessful && film != null) {
+                displayFilm(film)
             } else {
                 binding.root.showSnackBar(
                     getString(R.string.error_msg),
@@ -38,7 +36,7 @@ class FilmFragment : Fragment() {
             }
         }
 
-        override fun onFailure(call: Call<FilmDTO>, t: Throwable) {
+        override fun onFailure(call: Call<Film>, t: Throwable) {
             AppState.Error(t)
         }
     }
@@ -56,7 +54,7 @@ class FilmFragment : Fragment() {
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getParcelable<FilmDTO>(ARG_FILM)?.let { film ->
+        arguments?.getParcelable<Film>(ARG_FILM)?.let { film ->
             filmId = film.id
             RestApi.api.getFilm(filmId).enqueue(callBack)
         }
@@ -65,18 +63,18 @@ class FilmFragment : Fragment() {
         binding.loadingLayout.visibility = View.VISIBLE
     }
 
-    private fun displayFilm(filmDTO: FilmDTO) {
+    private fun displayFilm(film: Film) {
         with(binding) {
             mainView.visibility = View.VISIBLE
             loadingLayout.visibility = View.GONE
 
-            filmCardCaption.text = filmDTO.original_title
-            filmCardDescription.text = filmDTO.overview
-            filmCardTags.text = filmDTO.genresToString()
-            filmCardRate.rating = filmDTO.popularity ?: 0f
+            filmCardCaption.text = film.original_title
+            filmCardDescription.text = film.overview
+            filmCardTags.text = film.genresToString()
+            filmCardRate.rating = film.popularity ?: 0f
 
             context?.let {
-                val posterPath = RestApiMethods.ADDRESS_IMAGE_600X900 + filmDTO.poster_path
+                val posterPath = RestApiMethods.ADDRESS_IMAGE_600X900 + film.poster_path
                 Glide.with(it)
                     .load(posterPath)
                     .into(filmCardPoster)
@@ -102,7 +100,7 @@ class FilmFragment : Fragment() {
         const val ARG_FILM = "film"
 
         @JvmStatic
-        fun newInstance(film: FilmDTO) =
+        fun newInstance(film: Film) =
             FilmFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_FILM, film)

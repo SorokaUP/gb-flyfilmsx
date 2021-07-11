@@ -1,39 +1,54 @@
 package ru.sorokin.flyfilmsx.model
 
-import java.util.*
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import java.io.Serializable
 
 @Parcelize
 data class Film (
-    val id: Int,
-    val caption: String,
-    val description: String,
-    val dateFrom: Date,
-    val tags: String,
-    val posterPath: String,
-    val rate:Float
-    ) : Parcelable
+    var genres: List<Genre>?,
+    var homepage: String?,
+    var id: Int,
+    var original_language: String?,
+    var original_title: String?,
+    var overview: String?,
+    var popularity: Float?,
+    var poster_path: String?,
+    var production_companies: List<ProductionCompanies>?,
+    var production_countries: List<ProductionCountries>?,
+    var release_date: String?,
+    var runtime: Int?,
+    var spoken_languages: List<SpokenLanguage>?,
+    var status: String?,
+    var tagline: String?,
 
-@Parcelize
-data class FilmDTO (
-    val genres: List<GenreDTO>?,
-    val homepage: String?,
-    val id: Int,
-    val original_language: String?,
-    val original_title: String?,
-    val overview: String?,
-    val popularity: Float?,
-    val poster_path: String?,
-    val production_companies: List<ProductionCompaniesDTO>?,
-    val production_countries: List<ProductionCountriesDTO>?,
-    val release_date: String?,
-    val runtime: Int?,
-    val spoken_languages: List<SpokenLanguageDTO>?,
-    val status: String?,
-    val tagline: String?
+    // Custom fields
+    var isLike: Boolean?,
+    var adult: Boolean?
 ) : Parcelable {
+
+    companion object StaticFun {
+        fun newEmpty() = Film(
+            null,
+            null,
+            0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+
+            null,
+            null
+        )
+    }
+
     fun genresToString() : String {
         var res = ""
         genres?.let {
@@ -44,13 +59,13 @@ data class FilmDTO (
 }
 
 @Parcelize
-data class GenreDTO(
+data class Genre(
     val id: Int,
     val name: String
 ) : Parcelable
 
 @Parcelize
-data class ProductionCompaniesDTO (
+data class ProductionCompanies (
     val id: Int,
     val logo_path: String,
     val name: String,
@@ -58,13 +73,13 @@ data class ProductionCompaniesDTO (
 ) : Parcelable
 
 @Parcelize
-data class ProductionCountriesDTO (
+data class ProductionCountries (
     val iso_3166_1: String,
     val name: String
 ) : Parcelable
 
 @Parcelize
-data class SpokenLanguageDTO (
+data class SpokenLanguage (
     val english_name: String,
     val iso_639_1: String,
     val name: String
@@ -72,14 +87,14 @@ data class SpokenLanguageDTO (
 
 
 
-data class PopularListDTO (
+data class PopularList (
     val page: Int,
-    val results: List<PopularResultDTO>,
+    val results: List<PopularResult>,
     val total_pages: Int,
     val total_results: Int
 )
 
-data class PopularResultDTO (
+data class PopularResult (
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,
@@ -95,21 +110,17 @@ data class PopularResultDTO (
     val vote_average: Float,
     val vote_count: Int
 ) {
-    fun toFilmDTO() = FilmDTO (
-        null,
-        null,
-        id,
-        original_language,
-        original_title,
-        overview,
-        popularity,
-        poster_path,
-        null,
-        null,
-        release_date,
-        null,
-        null,
-        null,
-        null
-    )
+    fun toFilm(): Film {
+        val film: Film = Film.newEmpty()
+        film.id = id
+        film.original_language = original_language
+        film.original_title = original_title
+        film.overview = overview
+        film.popularity = popularity
+        film.poster_path = poster_path
+        film.release_date = release_date
+        film.adult = adult
+
+        return film
+    }
 }

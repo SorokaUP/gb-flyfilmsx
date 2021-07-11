@@ -9,10 +9,10 @@ interface IRestApiRetrofit {
     @GET("popular")
     fun getFilmsPopular(
         @Query("page") pageId: Int
-    ): Call<PopularListDTO>
+    ): Call<PopularList>
 
     @GET("{id}")
     fun getFilm(
         @Path("id") id: Int
-    ): Call<FilmDTO>
+    ): Call<Film>
 }

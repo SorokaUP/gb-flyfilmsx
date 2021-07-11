@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,15 +21,43 @@
             android:layout_height="200dp"
             android:src="@drawable/poster_none"/>
 
-        <TextView
-            android:id="@+id/caption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/testFilmLayoutCaption"
-            android:maxLines="2"
-            android:textStyle="bold"
-            android:textColor="@color/filmLayoutCaption"
-            android:paddingBottom="3dp"
-            android:paddingTop="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/testFilmLayoutCaption"
+                android:layout_weight="2"
+                android:maxLines="2"
+                android:textStyle="bold"
+                android:textColor="@color/filmLayoutCaption"
+                android:paddingBottom="3dp"
+                android:paddingTop="5dp"/>
+
+            <CheckBox
+                android:id="@+id/is_like"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:text="@string/is_like"/>
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/content18plus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:text="@string/content18plusCard"
+        android:textColor="#FF8C8C"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 </androidx.cardview.widget.CardView>

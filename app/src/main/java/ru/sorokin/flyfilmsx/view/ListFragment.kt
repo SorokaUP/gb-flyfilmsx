@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.FragmentListBinding
 import ru.sorokin.flyfilmsx.viewmodel.AppState
-import ru.sorokin.flyfilmsx.model.FilmDTO
+import ru.sorokin.flyfilmsx.model.Film
 import ru.sorokin.flyfilmsx.viewmodel.ListFragmentAdapter
 import ru.sorokin.flyfilmsx.viewmodel.MainViewModel
 
@@ -20,7 +20,7 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val adapter = ListFragmentAdapter(object : OnItemViewClickListener {
-        override fun onItemViewClick(film: FilmDTO) {
+        override fun onItemViewClick(film: Film) {
             activity?.supportFragmentManager?.let {
                 it.beginTransaction()
                     .add(R.id.fragment_container, FilmFragment.newInstance(film))
@@ -85,7 +85,7 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun setData(filmData: List<FilmDTO>) {
+    private fun setData(filmData: List<Film>) {
         filmData?.let {
             adapter.setListFilm(filmData)
         }
@@ -113,7 +113,7 @@ class ListFragment : Fragment() {
     }
 
     interface OnItemViewClickListener {
-        fun onItemViewClick(film: FilmDTO)
+        fun onItemViewClick(film: Film)
     }
 
     override fun onDestroyView() {
