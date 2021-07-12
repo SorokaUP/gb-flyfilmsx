@@ -24,6 +24,18 @@ class DBRepository(private val localDataSource: HistoryDao) : IDBRepository {
         return convertHistoryEntityToFilm(localDataSource.getIsLike(film_id))
     }
 
+    override fun getFilmByNameLike(title: String): List<Film> {
+        return convertHistoryEntityToFilm(localDataSource.getFilmByNameLike(title))
+    }
+
+    override fun setComment(film_id: Int, comment: String) {
+        localDataSource.setComment(film_id, comment)
+    }
+
+    override fun getComment(film_id: Int): String {
+        return localDataSource.getComment(film_id)
+    }
+
     private fun convertHistoryEntityToFilm(entityList: List<HistoryEntity>): List<Film> {
         return entityList.map {
             val film = Film.newEmpty()
@@ -42,7 +54,8 @@ class DBRepository(private val localDataSource: HistoryDao) : IDBRepository {
             film.id,
             film.original_title ?: "",
             film.poster_path ?: "",
-            if (film.isLike == true) {1} else {0}
+            if (film.isLike == true) {1} else {0},
+            film.comment ?: ""
         )
     }
 }

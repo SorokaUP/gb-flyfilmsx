@@ -5,4 +5,6 @@ interface IRepository {
 
     fun getFilmsPopularFromServer(callback: retrofit2.Callback<PopularList>, pageId: Int)
     fun getFilmFromServer(callback: retrofit2.Callback<Film>, id: Int)
+
+    fun getFilmByNameLikeFromDataBase(query: String): List<Film>
 }

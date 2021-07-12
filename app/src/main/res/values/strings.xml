@@ -34,5 +34,8 @@
     <string name="search">Поиск</string>
     <string name="content18plusCard">18+</string>
     <string name="is_like">Нравится</string>
+    <string name="commentNow">Оставить заметку</string>
+    <string name="todoComment">Оставьте заметку...</string>
+    <string name="btnCommentOk">Ok</string>
 
 </resources>

@@ -17,6 +17,9 @@ interface HistoryDao {
     @Query("SELECT * FROM HistoryEntity WHERE film_id = :film_id")
     fun getDataLike(film_id: Int): List<HistoryEntity>
 
+    @Query("select * from HistoryEntity where film_id = :film_id")
+    fun getFilmByFilmId(film_id: Int) : List<HistoryEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(entity: HistoryEntity)
 
@@ -31,4 +34,13 @@ interface HistoryDao {
 
     @Query("select * from HistoryEntity where film_id = :film_id")
     fun getIsLike(film_id: Int): List<HistoryEntity>
+
+    @Query("update HistoryEntity set comment = :comment where film_id = :film_id")
+    fun setComment(film_id: Int, comment: String)
+
+    @Query("select comment from HistoryEntity where film_id = :film_id")
+    fun getComment(film_id: Int): String
+
+    @Query("select * from HistoryEntity where original_title like :title+'%'")
+    fun getFilmByNameLike(title: String) : List<HistoryEntity>
 }

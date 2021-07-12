@@ -26,7 +26,7 @@ class MainViewModel(
     fun getLiveData() = liveDataToObserve
     fun getFilmsFromLocalSource() = getDataFromLocalSource()
     fun getFilmsFromServerSource() = getDataFromServerSource()
-    fun getFilmsLikeFromDataBase() = getDataLikeFromDataBase()
+    fun getFilmByNameLike(query: String) = getFilmByNameLikeFromDataBase(query)
 
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
@@ -38,15 +38,13 @@ class MainViewModel(
         }.start()
     }
 
-    private fun getDataLikeFromDataBase() {
+    private fun getFilmByNameLikeFromDataBase(query: String) {
         liveDataToObserve.value = AppState.Loading
         Thread {
-            val listFilmDTO = historyRepository.getAllLike()
-            if (listFilmDTO.isNotEmpty()) {
-                AppState.Success(listFilmDTO)
-            } else {
-                AppState.Error(Exception("DATABASE EMPTY"))
-            }
+            // Искусственная пауза для создания эффекта подгрузки данных с сервера
+            Thread.sleep(1000)
+            // В связи с тем, что данные попадают из отдельного потока, используется postValue
+            liveDataToObserve.postValue(AppState.Success(repository.getFilmByNameLikeFromDataBase(query)))
         }.start()
     }
 
@@ -65,6 +63,7 @@ class MainViewModel(
                     val listFilmDTO = ArrayList<Film>()
                     for (item: PopularResult in popularList.results) {
                         listFilmDTO.add(item.toFilm())
+                        historyRepository.saveEntity(item.toFilm())
                     }
 
                     AppState.Success(listFilmDTO)

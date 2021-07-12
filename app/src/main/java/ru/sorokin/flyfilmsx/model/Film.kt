@@ -23,7 +23,8 @@ data class Film (
 
     // Custom fields
     var isLike: Boolean?,
-    var adult: Boolean?
+    var adult: Boolean?,
+    var comment: String?
 ) : Parcelable {
 
     companion object StaticFun {
@@ -44,6 +45,7 @@ data class Film (
             null,
             null,
 
+            null,
             null,
             null
         )

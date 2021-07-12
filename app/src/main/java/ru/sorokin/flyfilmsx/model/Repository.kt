@@ -1,14 +1,23 @@
 package ru.sorokin.flyfilmsx.model
 
+import ru.sorokin.flyfilmsx.App.App
+import ru.sorokin.flyfilmsx.room.DBRepository
+import ru.sorokin.flyfilmsx.room.IDBRepository
 import kotlin.collections.ArrayList
 
 class Repository : IRepository {
+    private val historyRepository: IDBRepository = DBRepository(App.getHistoryDao())
+
     override fun getFilmsPopularFromServer(callback: retrofit2.Callback<PopularList>, pageId: Int) {
         RestApi.api.getFilmsPopular(pageId).enqueue(callback)
     }
 
     override fun getFilmFromServer(callback: retrofit2.Callback<Film>, id: Int) {
         RestApi.api.getFilm(id).enqueue(callback)
+    }
+
+    override fun getFilmByNameLikeFromDataBase(query: String): List<Film> {
+        return historyRepository.getFilmByNameLike(query);
     }
 
     override fun getFilmsFromLocalStorage() : List<Film> {

@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         return if (menu != null) {
             val search: MenuItem = menu.findItem(R.id.menuSearch)
             val searchText: SearchView = search.actionView as SearchView
+
             searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     Toast.makeText(binding.root.context, query, Toast.LENGTH_LONG).show()

@@ -11,5 +11,6 @@ data class HistoryEntity(
     val film_id: Int,
     val original_title: String,
     val poster_path: String,
-    val is_like: Int
+    val is_like: Int,
+    val comment: String
 )

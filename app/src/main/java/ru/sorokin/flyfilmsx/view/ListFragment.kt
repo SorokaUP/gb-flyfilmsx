@@ -1,11 +1,12 @@
 package ru.sorokin.flyfilmsx.view
 
+import android.app.SearchManager
+import android.app.SearchManager.QUERY
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import ru.sorokin.flyfilmsx.R
@@ -110,6 +111,26 @@ class ListFragment : Fragment() {
         length: Int = Snackbar.LENGTH_INDEFINITE
     ) {
         Snackbar.make(this, getString(stringId), length).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.main_menu, menu)
+        val search = menu.findItem(R.id.menuSearch)
+
+        val searchText = search.actionView as SearchView
+        searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+                viewModel.getFilmByNameLike(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                //searchUsers(newText.toLowerCase()) в разработке
+                return true
+            }
+        })
     }
 
     interface OnItemViewClickListener {

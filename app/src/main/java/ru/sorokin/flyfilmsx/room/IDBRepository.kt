@@ -9,4 +9,9 @@ interface IDBRepository {
 
     fun setIsLike(film_id: Int, is_like: Int)
     fun getIsLike(film_id: Int): List<Film>
+
+    fun setComment(film_id: Int, comment: String)
+    fun getComment(film_id: Int): String
+
+    fun getFilmByNameLike(title: String): List<Film>
 }

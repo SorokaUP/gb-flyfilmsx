@@ -16,7 +16,7 @@ class App : Application() {
 
         private var appInstance: App? = null
         private var db: HistoryDataBase? = null
-        private const val DB_NAME = "History.db"
+        private const val DB_NAME = "History_210712.db"
 
         fun getHistoryDao(): HistoryDao {
             if (db == null) {
@@ -28,6 +28,7 @@ class App : Application() {
                             HistoryDataBase::class.java,
                             DB_NAME)
                             .allowMainThreadQueries()
+                            .addMigrations()
                             .build()
                     }
                 }
