@@ -89,14 +89,14 @@ data class SpokenLanguage (
 
 
 
-data class PopularList (
+data class ResponseList (
     val page: Int,
-    val results: List<PopularResult>,
+    val results: List<ResponseResult>,
     val total_pages: Int,
     val total_results: Int
 )
 
-data class PopularResult (
+data class ResponseResult (
     val adult: Boolean,
     val backdrop_path: String,
     val genre_ids: List<Int>,

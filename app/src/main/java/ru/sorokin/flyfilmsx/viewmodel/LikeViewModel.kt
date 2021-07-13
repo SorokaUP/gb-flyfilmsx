@@ -2,14 +2,7 @@ package ru.sorokin.flyfilmsx.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import ru.sorokin.flyfilmsx.App.App
-import ru.sorokin.flyfilmsx.model.Film
-import ru.sorokin.flyfilmsx.model.PopularList
-import ru.sorokin.flyfilmsx.model.PopularResult
-import ru.sorokin.flyfilmsx.model.Repository
 import ru.sorokin.flyfilmsx.room.DBRepository
 import ru.sorokin.flyfilmsx.room.IDBRepository
 

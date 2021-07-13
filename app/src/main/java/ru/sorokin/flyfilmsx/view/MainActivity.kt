@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return if (menu != null) {
             val search: MenuItem = menu.findItem(R.id.menuSearch)
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onCreateOptionsMenu(menu)
         }
-    }
+    }*/
 
     private fun goToMain() {
         supportFragmentManager.beginTransaction()

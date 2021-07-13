@@ -2,6 +2,7 @@ package ru.sorokin.flyfilmsx.view
 
 import android.app.SearchManager
 import android.app.SearchManager.QUERY
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
@@ -46,6 +47,7 @@ class ListFragment : Fragment() {
         // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
         // объект связку. Получает доступ к корневому элементу fragment_layout
         _binding = FragmentListBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -114,7 +116,6 @@ class ListFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.main_menu, menu)
         val search = menu.findItem(R.id.menuSearch)
 
@@ -122,7 +123,11 @@ class ListFragment : Fragment() {
         searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-                viewModel.getFilmByNameLike(query)
+                var isAdult: Boolean = false
+                activity?.let {
+                    isAdult = (it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_SHOW_18_PLUS, false))
+                }
+                viewModel.getFilmByNameLike(query, isAdult)
                 return true
             }
 
@@ -131,6 +136,8 @@ class ListFragment : Fragment() {
                 return true
             }
         })
+
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     interface OnItemViewClickListener {

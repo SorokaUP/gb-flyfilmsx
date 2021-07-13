@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import ru.sorokin.flyfilmsx.databinding.FragmentSettingsBinding
 
 
-private const val IS_SHOW_18_PLUS = "SHOW18PLUS"
+const val IS_SHOW_18_PLUS = "SHOW18PLUS"
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
