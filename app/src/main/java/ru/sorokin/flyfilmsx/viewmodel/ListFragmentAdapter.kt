@@ -48,7 +48,7 @@ class ListFragmentAdapter(
 
                 val likeInfo: List<Film> = historyRepository.getIsLike(film.id)
                 findViewById<CheckBox>(R.id.is_like).let {
-                    it.isChecked = if (likeInfo.isNotEmpty()) { likeInfo[0].isLike ?: false } else { false }
+                    it.isChecked = if (likeInfo.isNotEmpty()) { likeInfo.first().isLike ?: false } else { false }
                     it.setOnCheckedChangeListener { buttonView, isChecked ->
                         if (likeInfo.isNotEmpty()) {
                             historyRepository.setIsLike(film.id, if (isChecked) {1} else {0})
