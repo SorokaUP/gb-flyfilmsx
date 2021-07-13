@@ -6,13 +6,20 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface IRestApiRetrofit {
-    @GET("popular")
+    @GET("movie/popular")
     fun getFilmsPopular(
         @Query("page") pageId: Int
-    ): Call<PopularListDTO>
+    ): Call<ResponseList>
 
-    @GET("{id}")
+    @GET("movie/{id}")
     fun getFilm(
         @Path("id") id: Int
-    ): Call<FilmDTO>
+    ): Call<Film>
+
+    @GET("search/movie")
+    fun getFilmSearch(
+        @Query("page") page: Int,
+        @Query("include_adult") include_adult: Boolean,
+        @Query("query") query: String
+    ): Call<ResponseList>
 }

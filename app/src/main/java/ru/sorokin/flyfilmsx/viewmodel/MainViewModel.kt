@@ -1,18 +1,19 @@
 package ru.sorokin.flyfilmsx.viewmodel
 
-import android.net.sip.SipErrorCode.SERVER_ERROR
-import android.widget.Toast
-import androidx.lifecycle.LiveData
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.sorokin.flyfilmsx.model.FilmDTO
-import ru.sorokin.flyfilmsx.model.PopularListDTO
-import ru.sorokin.flyfilmsx.model.PopularResultDTO
+import ru.sorokin.flyfilmsx.App.App
+import ru.sorokin.flyfilmsx.model.Film
+import ru.sorokin.flyfilmsx.model.ResponseList
+import ru.sorokin.flyfilmsx.model.ResponseResult
 import ru.sorokin.flyfilmsx.model.Repository
+import ru.sorokin.flyfilmsx.room.DBRepository
+import ru.sorokin.flyfilmsx.room.IDBRepository
+import ru.sorokin.flyfilmsx.view.IS_SHOW_18_PLUS
 
 class MainViewModel(
     // LiveData может подписывать кого либо на себя, говоря тем самым кому бы то нибыло об
@@ -20,12 +21,14 @@ class MainViewModel(
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData(),
     // Источник данных для приложения. Сам Репозиторий берет данные от туда, от куда ему нужно,
     // он лишь получает и хранит данные
-    private val repository: Repository = Repository()
+    private val repository: Repository = Repository(),
+    private val historyRepository: IDBRepository = DBRepository(App.getHistoryDao())
 ) : ViewModel() {
 
     fun getLiveData() = liveDataToObserve
     fun getFilmsFromLocalSource() = getDataFromLocalSource()
     fun getFilmsFromServerSource() = getDataFromServerSource()
+    fun getFilmByNameLike(query: String, isAdult: Boolean) = getFilmByNameLikeFromServer(query, isAdult)//getFilmByNameLikeFromDataBase(query)
 
     private fun getDataFromLocalSource() {
         liveDataToObserve.value = AppState.Loading
@@ -37,21 +40,37 @@ class MainViewModel(
         }.start()
     }
 
+    private fun getFilmByNameLikeFromDataBase(query: String) {
+        liveDataToObserve.value = AppState.Loading
+        Thread {
+            liveDataToObserve.postValue(AppState.Success(repository.getFilmByNameLikeFromDataBase(query)))
+        }.start()
+    }
+
+    private fun getFilmByNameLikeFromServer(query: String, isAdult: Boolean) {
+        liveDataToObserve.value = AppState.Loading
+        Thread {
+            repository.getFilmByNameLikeFromServer(callBack, 1, isAdult, query)
+        }.start()
+    }
+
     private fun getDataFromServerSource() {
         liveDataToObserve.value = AppState.Loading
         repository.getFilmsPopularFromServer(callBack, 1)
     }
 
     private val callBack = object :
-        Callback<PopularListDTO> {
+        Callback<ResponseList> {
 
-        override fun onResponse(call: Call<PopularListDTO>, response: Response<PopularListDTO>) {
-            val popularListDTO: PopularListDTO? = response.body()
+        override fun onResponse(call: Call<ResponseList>, response: Response<ResponseList>) {
+            val resList: ResponseList? = response.body()
             liveDataToObserve.postValue(
-                if (response.isSuccessful && popularListDTO != null) {
-                    val listFilmDTO = ArrayList<FilmDTO>()
-                    for (item: PopularResultDTO in popularListDTO.results) {
-                        listFilmDTO.add(item.toFilmDTO())
+                if (response.isSuccessful && resList != null) {
+                    val listFilmDTO = ArrayList<Film>()
+                    for (item: ResponseResult in resList.results) {
+                        listFilmDTO.add(item.toFilm())
+                        // Получая новый фильм, сохраняем его
+                        historyRepository.saveEntity(item.toFilm())
                     }
 
                     AppState.Success(listFilmDTO)
@@ -61,7 +80,7 @@ class MainViewModel(
             )
         }
 
-        override fun onFailure(call: Call<PopularListDTO>, t: Throwable) {
+        override fun onFailure(call: Call<ResponseList>, t: Throwable) {
             AppState.Error(t)
         }
     }

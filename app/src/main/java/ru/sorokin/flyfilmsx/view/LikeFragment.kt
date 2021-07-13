@@ -1,27 +1,24 @@
 package ru.sorokin.flyfilmsx.view
 
-import android.app.SearchManager
-import android.app.SearchManager.QUERY
-import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.view.*
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import ru.sorokin.flyfilmsx.R
+import ru.sorokin.flyfilmsx.databinding.FragmentLikeBinding
 import ru.sorokin.flyfilmsx.databinding.FragmentListBinding
-import ru.sorokin.flyfilmsx.viewmodel.AppState
 import ru.sorokin.flyfilmsx.model.Film
-import ru.sorokin.flyfilmsx.viewmodel.ListFragmentAdapter
-import ru.sorokin.flyfilmsx.viewmodel.MainViewModel
+import ru.sorokin.flyfilmsx.viewmodel.*
 
-class ListFragment : Fragment() {
+class LikeFragment : Fragment() {
 
-    private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentLikeBinding? = null
     private val binding get() = _binding!!
-    private val adapter = ListFragmentAdapter(object : OnItemViewClickListener {
+    private val adapter = LikeFragmentAdapter(object : OnItemViewClickListener {
         override fun onItemViewClick(film: Film) {
             activity?.supportFragmentManager?.let {
                 it.beginTransaction()
@@ -33,21 +30,20 @@ class ListFragment : Fragment() {
     })
 
     companion object {
-        fun newInstance() = ListFragment()
+        fun newInstance() = LikeFragment()
     }
 
     // Модель данных - поставщик, который будет хранить наши данные, будет объявлен позже, по
     // факту создания Fragment
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+    private val viewModel: LikeViewModel by lazy {
+        ViewModelProvider(this).get(LikeViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Так как с визуальными объектами проще всего взаимодействовать по имени, формируем
         // объект связку. Получает доступ к корневому элементу fragment_layout
-        _binding = FragmentListBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
+        _binding = FragmentLikeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,7 +58,7 @@ class ListFragment : Fragment() {
             renderData(it)
         })
         // И сразу же просим поставщика получить данные
-        viewModel.getFilmsFromServerSource()
+        viewModel.getFilmsLikeFromDataBase()
     }
 
     private fun renderData(appState: AppState) {
@@ -82,7 +78,7 @@ class ListFragment : Fragment() {
                 binding.root.showSnackBar(
                     getString(R.string.error_msg),
                     getString(R.string.reload_msg),
-                    { viewModel.getFilmsFromServerSource() }
+                    { viewModel.getFilmsLikeFromDataBase() }
                 )
             }
         }
@@ -113,31 +109,6 @@ class ListFragment : Fragment() {
         length: Int = Snackbar.LENGTH_INDEFINITE
     ) {
         Snackbar.make(this, getString(stringId), length).show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
-        val search = menu.findItem(R.id.menuSearch)
-
-        val searchText = search.actionView as SearchView
-        searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
-                var isAdult: Boolean = false
-                activity?.let {
-                    isAdult = (it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_SHOW_18_PLUS, false))
-                }
-                viewModel.getFilmByNameLike(query, isAdult)
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                //searchUsers(newText.toLowerCase()) в разработке
-                return true
-            }
-        })
-
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     interface OnItemViewClickListener {

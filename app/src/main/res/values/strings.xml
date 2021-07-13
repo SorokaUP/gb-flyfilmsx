@@ -6,7 +6,7 @@
     <string name="filmDescription">Описание фильма</string>
     <string name="filmTags">Категории фильма</string>
     <string name="filmDateFrom">Дата старта проката</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_msg">Ошбика</string>
     <string name="reload_msg">Обновить</string>
@@ -27,5 +27,15 @@
     <string name="handler_thread">Handler_Thread</string>
     <string name="service">Service</string>
     <string name="service_broadcast">Service + Broadcast</string>
+    <string name="content18plus">Контент для взрослых</string>
+    <string name="toMain">На главную</string>
+    <string name="settings">Настройки</string>
+    <string name="like">Избранное</string>
+    <string name="search">Поиск</string>
+    <string name="content18plusCard">18+</string>
+    <string name="is_like">Нравится</string>
+    <string name="commentNow">Оставить заметку</string>
+    <string name="todoComment">Оставьте заметку...</string>
+    <string name="btnCommentOk">Ok</string>
 
 </resources>

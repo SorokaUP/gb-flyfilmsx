@@ -1,9 +1,11 @@
 package ru.sorokin.flyfilmsx.model
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import okio.Buffer
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.sorokin.flyfilmsx.BuildConfig
@@ -44,6 +46,7 @@ object RestApi {
                             .build())
                     .method(original.method(), original.body())
                 val request: Request = requestBuilder.build()
+                Log.d("RestApiRequest", request.url().toString())
                 chain.proceed(request)
             }
         }.build()
