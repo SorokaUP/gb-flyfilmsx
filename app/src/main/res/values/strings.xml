@@ -37,5 +37,8 @@
     <string name="commentNow">Оставить заметку</string>
     <string name="todoComment">Оставьте заметку...</string>
     <string name="btnCommentOk">Ok</string>
+    <string name="contacts_title">Контакты</string>
+    <string name="permission_error_msg">Ошибка загрузки контактов</string>
+    <string name="permission_reload_msg">Попробовать снова</string>
 
 </resources>
