@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             goToMain()
+            //goToContacts()
         }
     }
 
@@ -60,6 +61,12 @@ class MainActivity : AppCompatActivity() {
     private fun goToMain() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, ListFragment.newInstance())
+            .commitNow()
+    }
+
+    private fun goToContacts() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, ContactsFragment.newInstance())
             .commitNow()
     }
 
