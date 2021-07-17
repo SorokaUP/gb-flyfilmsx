@@ -93,6 +93,16 @@ class MainActivity : AppCompatActivity() {
 
                 true
             }
+            R.id.menu_google_maps -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container, MapsFragment())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+
+                true
+            }
             else -> {
                 super.onOptionsItemSelected(item)
             }
