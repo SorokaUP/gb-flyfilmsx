@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import ru.sorokin.flyfilmsx.R
 import ru.sorokin.flyfilmsx.databinding.AppBarMainBinding
 import ru.sorokin.flyfilmsx.databinding.MainActivityBinding
@@ -89,6 +90,16 @@ class MainActivity : AppCompatActivity() {
                     .replace(R.id.fragment_container, LikeFragment.newInstance())
                     .addToBackStack(null)
                     .commit()
+
+                true
+            }
+            R.id.menu_google_maps -> {
+                supportFragmentManager.apply {
+                    beginTransaction()
+                        .add(R.id.container, MapsFragment())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
 
                 true
             }
